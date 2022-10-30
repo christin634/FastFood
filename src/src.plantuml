@@ -1,0 +1,101 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class Beverage
+class Chicken
+class ClerkFrame {
+  - strategy: Strategy
+  - kfcFoods: List<Food>
+  ~ RowSize: int
+  - serialVersionUID: long
+  - wallaceTable: JTable
+  - director: Director
+  - kfcTable: JTable
+  - contentPane: ImagePanel
+  - rowData: Vector<Vector<Object>>
+  - textField: JTextField
+  ~ user: User
+  ~ meal: Meal
+  - table: JTable
+  - memberShipService: MemberShipService
+  - total: JTextField
+  - orderTableModel: DefaultTableModel
+  - cbx: JCheckBox
+  ~ foodService: FoodService
+  - primaryPrice: float
+  ~ orderService: OrderService
+  - wallaceFoods: List<Food>
+  - tabbedPane: JTabbedPane
+}
+interface Factory << interface >>
+class Food {
+  - id: Long
+  - type: int
+  - brand: String
+  - name: String
+  - price: float
+}
+class Hamburg
+class KFCFactory {
+  ~ hamburgService: HamburgService
+  ~ chickenService: ChickenService
+  ~ beverageService: BeverageService
+  ~ snackService: SnackService
+}
+class KFCMealBuilder
+class Meal {
+  - foods: List<Food>
+  - price: float
+}
+class MealBuilder {
+  # factory: Factory
+}
+class MemberShip {
+  - id: Long
+  - cardnum: String
+  - phone: String
+  - discount: float
+}
+class Order {
+  - number: String
+  - date: String
+  - content: String
+  - price: float
+}
+class Snack
+interface Strategy << interface >>
+class WallaceFactory {
+  ~ chickenService: ChickenService
+  ~ beverageService: BeverageService
+  ~ hamburgService: HamburgService
+  ~ snackService: SnackService
+}
+class WallaceMealBuilder
+
+Beverage            -[#000082,plain]-^  Food               
+Chicken             -[#000082,plain]-^  Food               
+ClerkFrame         "1" *-[#595959,plain]-> "kfcFoods\n*" Food               
+ClerkFrame          -[#595959,dashed]->  Food               : "«create»"
+ClerkFrame          -[#595959,dashed]->  KFCMealBuilder     : "«create»"
+ClerkFrame          -[#595959,dashed]->  Meal               : "«create»"
+ClerkFrame         "1" *-[#595959,plain]-> "meal\n1" Meal               
+ClerkFrame          -[#595959,dashed]->  Order              : "«create»"
+ClerkFrame         "1" *-[#595959,plain]-> "strategy\n1" Strategy           
+ClerkFrame          -[#595959,dashed]->  WallaceMealBuilder : "«create»"
+Hamburg             -[#000082,plain]-^  Food               
+KFCFactory          -[#008200,dashed]-^  Factory            
+KFCMealBuilder      -[#595959,dashed]->  KFCFactory         : "«create»"
+KFCMealBuilder      -[#595959,dashed]->  Meal               : "«create»"
+KFCMealBuilder      -[#000082,plain]-^  MealBuilder        
+Meal               "1" *-[#595959,plain]-> "foods\n*" Food               
+MealBuilder        "1" *-[#595959,plain]-> "factory\n1" Factory            
+MemberShip          -[#008200,dashed]-^  Strategy           
+Snack               -[#000082,plain]-^  Food               
+WallaceFactory      -[#008200,dashed]-^  Factory            
+WallaceMealBuilder  -[#595959,dashed]->  Meal               : "«create»"
+WallaceMealBuilder  -[#000082,plain]-^  MealBuilder        
+WallaceMealBuilder  -[#595959,dashed]->  WallaceFactory     : "«create»"
+@enduml
